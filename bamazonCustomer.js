@@ -44,7 +44,13 @@ function purchase() {
         // get the information of the chosen item
         var chosenItem = answer.productId;
         var amountChosen = parseInt(answer.quantity);
-        var amountInStock = parseInt(results[chosenItem].stock_quantity);
+        var amountInStock = parseInt(results[parseInt(chosenItem) - 1].stock_quantity);
+        var price = parseFloat(results[parseInt(chosenItem) - 1].price);
+
+        console.log("Chosen item: " + chosenItem);
+        console.log("Amount chosen: " + amountChosen);
+        console.log("Amount in stock: " + amountInStock);
+        console.log("Price: " + price);
 
         // determine if there is enough to sell
         if (amountChosen < amountInStock) {
@@ -61,9 +67,14 @@ function purchase() {
             ],
             function(error) {
               if (error) console.log(error);
-              var total = (parseFloat(results[chosenItem].price) * amountChosen);
+
+              var total = (price * amountChosen);
+              console.log("Total: " + total);
               console.log(`Thanks for your purchase! Your transaction total is ${total}`);
-              purchase();
+              // purchase();
+              connection.end(function(err) {
+                if(err) console.log(err);
+              });
             }
           );
         }
